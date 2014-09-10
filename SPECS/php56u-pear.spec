@@ -19,7 +19,7 @@
 Summary: PHP Extension and Application Repository framework
 Name: %{name}
 Version: 1.9.4
-Release: 20.ius%{?dist}
+Release: 21.ius%{?dist}
 Epoch: 1
 # PEAR, Archive_Tar, XML_Util are BSD
 # Console_Getopt is PHP
