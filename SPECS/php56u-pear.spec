@@ -2,11 +2,11 @@
 %global metadir %{_localstatedir}/lib/pear
 
 %global getoptver 1.3.1
-%global arctarver 1.3.11
+%global arctarver 1.3.13
 # https://pear.php.net/bugs/bug.php?id=19367
 # Structures_Graph 1.0.4 - incorrect FSF address
 %global structver 1.0.4
-%global xmlutil   1.2.1
+%global xmlutil   1.2.3
 
 # Tests are only run with rpmbuild --with tests
 # Can't be run in mock / koji because PEAR is the first package
@@ -14,12 +14,11 @@
 
 %define php_base php56u
 %define real_name php-pear
-%define name %{php_base}-pear
 
 Summary: PHP Extension and Application Repository framework
-Name: %{name}
-Version: 1.9.4
-Release: 21.ius%{?dist}
+Name: %{php_base}-pear
+Version: 1.9.5
+Release: 1.ius%{?dist}
 Epoch: 1
 # PEAR, Archive_Tar, XML_Util are BSD
 # Console_Getopt is PHP
@@ -40,9 +39,12 @@ Source22: http://pear.php.net/get/Console_Getopt-%{getoptver}.tgz
 Source23: http://pear.php.net/get/Structures_Graph-%{structver}.tgz
 Source24: http://pear.php.net/get/XML_Util-%{xmlutil}.tgz
 # Man pages
+# https://github.com/pear/pear-core/pull/14
 Source30: pear.1
 Source31: pecl.1
 Source32: peardev.1
+# https://github.com/pear/pear-core/pull/16
+Source33: pear.conf.5
 
 
 # From RHEL: ignore REST cache creation failures as non-root user (#747361)
@@ -52,10 +54,11 @@ Patch0: php-pear-1.9.4-restcache.patch
 Patch1: php-pear-metadata.patch
 
 BuildArch: noarch
-BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
-BuildRequires: %{php_base}-cli, %{php_base}-xml, gnupg
+BuildRequires: %{php_base}-cli
+BuildRequires: %{php_base}-xml
+BuildRequires: gnupg
 %if %{with_tests}
-BuildRequires:  php-pear(pear.phpunit.de/PHPUnit)
+BuildRequires:  %{_bindir}/phpunit
 %endif
 
 Provides: php-pear(Console_Getopt) = %{getoptver}
@@ -64,13 +67,13 @@ Provides: php-pear(PEAR) = %{version}
 Provides: php-pear(Structures_Graph) = %{structver}
 Provides: php-pear(XML_Util) = %{xmlutil}
 Provides: php-pear-XML-Util = %{xmlutil}
+
 Provides: %{php_base}-pear(Console_Getopt) = %{getoptver}
 Provides: %{php_base}-pear(Archive_Tar) = %{arctarver}
 Provides: %{php_base}-pear(PEAR) = %{version}
 Provides: %{php_base}-pear(Structures_Graph) = %{structver}
-Provides: %{php_base}-pear(XML_RPC) = %{xmlrpcver}
 Provides: %{php_base}-pear(XML_Util) = %{xmlutil}
-Provides: %{php_base}-pear-XML-Util = %{xmlutil}-%{release}: php-pear-XML-Util < %{xmlutil}
+Provides: %{php_base}-pear-XML-Util = %{xmlutil}-%{release}
 
 
 Requires:  %{php_base}-cli
@@ -99,6 +102,7 @@ Requires:  %{php_base}-bz2
 PEAR is a framework and distribution system for reusable PHP
 components.  This package contains the basic PEAR components.
 
+
 %prep
 %setup -cT
 
@@ -114,7 +118,7 @@ do
     [ -f package2.xml ] && mv package2.xml ${file%%-*}.xml \
                         || mv package.xml  ${file%%-*}.xml
 done
-cp %{SOURCE1} %{SOURCE30} %{SOURCE31} %{SOURCE32} .
+cp %{SOURCE1} %{SOURCE30} %{SOURCE31} %{SOURCE32} %{SOURCE33} .
 
 # apply patches on used PEAR during install
 %patch1 -p0 -b .metadata
@@ -125,8 +129,6 @@ cp %{SOURCE1} %{SOURCE30} %{SOURCE31} %{SOURCE32} .
 
 
 %install
-rm -rf $RPM_BUILD_ROOT
-
 export PHP_PEAR_SYSCONF_DIR=%{_sysconfdir}
 export PHP_PEAR_SIG_KEYDIR=%{_sysconfdir}/pearkeys
 export PHP_PEAR_SIG_BIN=%{_bindir}/gpg
@@ -193,6 +195,8 @@ install -m 644 *.xml $RPM_BUILD_ROOT%{_localstatedir}/lib/pear/pkgxml
 # The man pages
 install -d $RPM_BUILD_ROOT%{_mandir}/man1
 install -p -m 644 pear.1 pecl.1 peardev.1 $RPM_BUILD_ROOT%{_mandir}/man1/
+install -d $RPM_BUILD_ROOT%{_mandir}/man5
+install -p -m 644 pear.conf.5 $RPM_BUILD_ROOT%{_mandir}/man5/
 
 
 %check
@@ -220,11 +224,6 @@ phpunit \
 %else
 echo 'Test suite disabled (missing "--with tests" option)'
 %endif
-
-
-%clean
-rm -rf $RPM_BUILD_ROOT
-rm new-pear.conf
 
 
 %pre
@@ -266,7 +265,6 @@ fi
 
 
 %files
-%defattr(-,root,root,-)
 %{peardir}
 %dir %{metadir}
 %{metadir}/.channels
@@ -291,13 +289,16 @@ fi
 %{_mandir}/man1/pear.1*
 %{_mandir}/man1/pecl.1*
 %{_mandir}/man1/peardev.1*
+%{_mandir}/man5/pear.conf.5*
 
 
 %changelog
-* Thu Jul 11 2013 Ben Harper <ben.harper@rackspace.com> -  1:1.9.4-21.ius
-- porting from php55u-pear
+* Tue Oct 07 2014 Ben Harper <ben.harper@rackspace.com> - 1:1.9.5-1.ius
+- various changes to bring in line with changes made to php55-pear
+- latest upstream
 
-- porting from php-pear-1.9.4-20.fc20.src.rpm
+* Thu Jul 11 2013 Ben Harper <ben.harper@rackspace.com> - 1:1.9.4-21.ius
+- porting from php55u-pear
 
 * Tue Jun 18 2013 Remi Collet <rcollet@redhat.com> 1:1.9.4-19
 - add man pages for pear, peardev and pecl commands
