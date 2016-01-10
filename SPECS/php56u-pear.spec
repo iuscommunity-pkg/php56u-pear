@@ -23,6 +23,7 @@
 
 Summary: PHP Extension and Application Repository framework
 Name: %{php_base}-pear
+# When updating version, make sure to re-download Source0 and Source1
 Version: 1.10.1
 Release: 3.ius%{?dist}
 Epoch: 1
@@ -33,8 +34,7 @@ License: BSD and PHP and LGPLv2+
 Group: Development/Languages
 URL: http://pear.php.net/package/PEAR
 Source0: http://download.pear.php.net/package/PEAR-%{version}.tgz
-# wget https://raw.github.com/pear/pear-core/master/install-pear.php
-Source1: install-pear.php
+Source1: https://raw.githubusercontent.com/pear/pear-core/v%{version}/install-pear.php
 Source3: strip.php
 Source10: pear.sh
 Source11: pecl.sh
@@ -278,6 +278,7 @@ fi
 - Use correct licenses directory on EL7
 - Include Source25 (PEAR_Manpages) in tarball strip for loop
 - Provide php*-pear(PEAR_Manpages)
+- Change Source1 to a direct url (credit: Steven Barre), fetch current version
 
 * Tue Dec 29 2015 Carl George <carl.george@rackspace.com> - 1:1.10.1-2.ius
 - Add 1.10.1 source
