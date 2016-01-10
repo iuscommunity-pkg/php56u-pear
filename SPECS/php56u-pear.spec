@@ -12,6 +12,12 @@
 # Can't be run in mock / koji because PEAR is the first package
 %global with_tests       %{?_with_tests:1}%{!?_with_tests:0}
 
+%if 0%{?rhel} >= 7
+%global _macrosdir %{_rpmconfigdir}/macros.d
+%else
+%global _macrosdir %{_sysconfdir}/rpm
+%endif
+
 %define php_base php56u
 %define real_name php-pear
 
@@ -129,7 +135,6 @@ install -d $RPM_BUILD_ROOT%{peardir} \
            $RPM_BUILD_ROOT%{_localstatedir}/cache/php-pear \
            $RPM_BUILD_ROOT%{_localstatedir}/www/html \
            $RPM_BUILD_ROOT%{_localstatedir}/lib/pear/pkgxml \
-           $RPM_BUILD_ROOT%{_sysconfdir}/rpm \
            $RPM_BUILD_ROOT%{_sysconfdir}/pear
 
 export INSTALL_ROOT=$RPM_BUILD_ROOT
@@ -161,8 +166,8 @@ install -m 755 %{SOURCE12} $RPM_BUILD_ROOT%{_bindir}/peardev
 %{_bindir}/php -r "print_r(unserialize(substr(file_get_contents('$RPM_BUILD_ROOT%{_sysconfdir}/pear.conf'),17)));"
 
 
-install -m 644 -c %{SOURCE13} \
-           $RPM_BUILD_ROOT%{_sysconfdir}/rpm/macros.pear     
+install -m 644 -D %{SOURCE13} \
+           $RPM_BUILD_ROOT%{_macrosdir}/macros.pear
 
 # Why this file here ?
 rm -rf $RPM_BUILD_ROOT/.depdb* $RPM_BUILD_ROOT/.lock $RPM_BUILD_ROOT/.channels $RPM_BUILD_ROOT/.filemap
@@ -247,7 +252,7 @@ fi
 %{metadir}/pkgxml
 %{_bindir}/*
 %config(noreplace) %{_sysconfdir}/pear.conf
-%{_sysconfdir}/rpm/macros.pear
+%{_macrosdir}/macros.pear
 %dir %{_localstatedir}/cache/php-pear
 %dir %{_localstatedir}/www/html
 %dir %{_sysconfdir}/pear
@@ -266,6 +271,7 @@ fi
 %changelog
 * Sun Jan 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-3.ius
 - Fix conflict with stock php-pear
+- Use correct macros directory on EL7
 
 * Tue Dec 29 2015 Carl George <carl.george@rackspace.com> - 1:1.10.1-2.ius
 - Add 1.10.1 source
