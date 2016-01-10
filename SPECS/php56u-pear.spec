@@ -256,7 +256,9 @@ fi
 %dir %{_localstatedir}/cache/php-pear
 %dir %{_localstatedir}/www/html
 %dir %{_sysconfdir}/pear
-%doc README* LICENSE*
+%{!?_licensedir:%global license %%doc}
+%license LICENSE*
+%doc README*
 %dir %{_docdir}/pear
 %doc %{_docdir}/pear/*
 %dir %{_datadir}/tests
@@ -272,6 +274,7 @@ fi
 * Sun Jan 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-3.ius
 - Fix conflict with stock php-pear
 - Use correct macros directory on EL7
+- Use correct licenses directory on EL7
 
 * Tue Dec 29 2015 Carl George <carl.george@rackspace.com> - 1:1.10.1-2.ius
 - Add 1.10.1 source
