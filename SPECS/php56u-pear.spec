@@ -25,7 +25,7 @@ Summary: PHP Extension and Application Repository framework
 Name: %{php_base}-pear
 # When updating version, make sure to re-download Source0 and Source1
 Version: 1.10.1
-Release: 3.ius%{?dist}
+Release: 4.ius%{?dist}
 Epoch: 1
 # PEAR, PEAR_Manpages, Archive_Tar, XML_Util, Console_Getopt are BSD
 # Structures_Graph is LGPLv3+
@@ -134,6 +134,7 @@ install -d $RPM_BUILD_ROOT%{peardir} \
            $RPM_BUILD_ROOT%{_localstatedir}/cache/php-pear \
            $RPM_BUILD_ROOT%{_localstatedir}/www/html \
            $RPM_BUILD_ROOT%{_localstatedir}/lib/pear/pkgxml \
+           $RPM_BUILD_ROOT%{_docdir}/pecl \
            $RPM_BUILD_ROOT%{_sysconfdir}/pear
 
 export INSTALL_ROOT=$RPM_BUILD_ROOT
@@ -233,6 +234,13 @@ if [ "$current" != "%{metadir}" ]; then
     system >/dev/null || :
 fi
 
+current=$(%{_bindir}/pear config-get -c pecl doc_dir system)
+if [ "$current" != "%{_docdir}/pecl" ]; then
+%{_bindir}/pear config-set \
+    -c pecl \
+    doc_dir %{_docdir}/pecl \
+    system >/dev/null || :
+fi
 
 %triggerpostun -- php-pear-XML-Util
 # re-register extension unregistered during postun of obsoleted php-pear-XML-Util
@@ -261,6 +269,7 @@ fi
 %doc README*
 %dir %{_docdir}/pear
 %doc %{_docdir}/pear/*
+%dir %{_docdir}/pecl
 %dir %{_datadir}/tests
 %{_datadir}/tests/pear
 %{_datadir}/pear-data
@@ -271,6 +280,9 @@ fi
 
 
 %changelog
+* Thu Feb 04 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-4.ius
+- Set pecl doc_dir to /usr/share/doc/pecl (Fedora)
+
 * Sun Jan 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-3.ius
 - Fix conflict with stock php-pear
 - Use correct macros directory on EL7
