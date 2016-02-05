@@ -135,6 +135,7 @@ install -d $RPM_BUILD_ROOT%{peardir} \
            $RPM_BUILD_ROOT%{_localstatedir}/www/html \
            $RPM_BUILD_ROOT%{_localstatedir}/lib/pear/pkgxml \
            $RPM_BUILD_ROOT%{_docdir}/pecl \
+           $RPM_BUILD_ROOT%{_datadir}/tests/pecl \
            $RPM_BUILD_ROOT%{_sysconfdir}/pear
 
 export INSTALL_ROOT=$RPM_BUILD_ROOT
@@ -242,6 +243,15 @@ if [ "$current" != "%{_docdir}/pecl" ]; then
     system >/dev/null || :
 fi
 
+current=$(%{_bindir}/pear config-get -c pecl test_dir system)
+if [ "$current" != "%{_datadir}/tests/pecl" ]; then
+%{_bindir}/pear config-set \
+    -c pecl \
+    test_dir %{_datadir}/tests/pecl \
+    system >/dev/null || :
+fi
+
+
 %triggerpostun -- php-pear-XML-Util
 # re-register extension unregistered during postun of obsoleted php-pear-XML-Util
 %{_bindir}/pear install --nodeps --soft --force --register-only \
@@ -271,6 +281,7 @@ fi
 %doc %{_docdir}/pear/*
 %dir %{_docdir}/pecl
 %dir %{_datadir}/tests
+%dir %{_datadir}/tests/pecl
 %{_datadir}/tests/pear
 %{_datadir}/pear-data
 %{_mandir}/man1/pear.1*
@@ -282,6 +293,7 @@ fi
 %changelog
 * Thu Feb 04 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-4.ius
 - Set pecl doc_dir to /usr/share/doc/pecl (Fedora)
+- Set pecl test_dir to /usr/share/tests/pecl (Fedora)
 
 * Sun Jan 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-3.ius
 - Fix conflict with stock php-pear
