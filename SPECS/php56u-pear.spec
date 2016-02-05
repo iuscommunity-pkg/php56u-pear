@@ -269,6 +269,12 @@ fi
     %{_localstatedir}/lib/pear/pkgxml/XML_Util.xml >/dev/null || :
 
 
+%postun
+if [ $1 -eq 0 -a -d %{metadir}/.registry ] ; then
+  rm -rf %{metadir}/.registry
+fi
+
+
 %files
 %{peardir}
 %dir %{metadir}
@@ -306,6 +312,7 @@ fi
 - Set pecl doc_dir to /usr/share/doc/pecl (Fedora)
 - Set pecl test_dir to /usr/share/tests/pecl (Fedora)
 - Add composer provides (Fedora)
+- Cleanup registry after removal (Fedora)
 
 * Sun Jan 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-3.ius
 - Fix conflict with stock php-pear
