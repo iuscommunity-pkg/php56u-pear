@@ -69,6 +69,17 @@ Provides: %{php_base}-pear(XML_Util) = %{xmlutil}
 Provides: %{php_base}-pear-XML-Util = %{xmlutil}-%{release}
 Provides: %{php_base}-pear(PEAR_Manpages) = %{manpages}
 
+Provides: php-composer(pear/console_getopt) = %{getoptver}
+Provides: php-composer(pear/archive_tar) = %{arctarver}
+Provides: php-composer(pear/pear-core-minimal) = %{version}
+Provides: php-composer(pear/structures_graph) = %{structver}
+Provides: php-composer(pear/xml_util) = %{xmlutil}
+Provides: %{php_base}-composer(pear/console_getopt) = %{getoptver}
+Provides: %{php_base}-composer(pear/archive_tar) = %{arctarver}
+Provides: %{php_base}-composer(pear/pear-core-minimal) = %{version}
+Provides: %{php_base}-composer(pear/structures_graph) = %{structver}
+Provides: %{php_base}-composer(pear/xml_util) = %{xmlutil}
+
 Requires:  %{php_base}-cli
 
 # IUS Stuff
@@ -294,6 +305,7 @@ fi
 * Thu Feb 04 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-4.ius
 - Set pecl doc_dir to /usr/share/doc/pecl (Fedora)
 - Set pecl test_dir to /usr/share/tests/pecl (Fedora)
+- Add composer provides (Fedora)
 
 * Sun Jan 10 2016 Carl George <carl.george@rackspace.com> - 1:1.10.1-3.ius
 - Fix conflict with stock php-pear
