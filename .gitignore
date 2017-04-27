@@ -3,4 +3,5 @@ BUILDROOT
 MOCK
 RPMS
 SOURCES/*.tgz
+SOURCES/install-pear.php
 SRPMS

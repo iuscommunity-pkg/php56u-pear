@@ -18,12 +18,10 @@
 %global _macrosdir %{_sysconfdir}/rpm
 %endif
 
-%define php_base php56u
-%define real_name php-pear
+%define php php56u
 
 Summary: PHP Extension and Application Repository framework
-Name: %{php_base}-pear
-# When updating version, make sure to re-download Source0 and Source1
+Name: %{php}-pear
 Version: 1.10.3
 Release: 1.ius%{?dist}
 Epoch: 1
@@ -43,12 +41,11 @@ Source21: http://pear.php.net/get/Archive_Tar-%{arctarver}.tgz
 Source22: http://pear.php.net/get/Console_Getopt-%{getoptver}.tgz
 Source23: http://pear.php.net/get/Structures_Graph-%{structver}.tgz
 Source24: http://pear.php.net/get/XML_Util-%{xmlutil}.tgz
-# Man pages
 Source25: http://pear.php.net/get/PEAR_Manpages-%{manpages}.tgz
 
 BuildArch: noarch
-BuildRequires: %{php_base}-cli
-BuildRequires: %{php_base}-xml
+BuildRequires: %{php}-cli
+BuildRequires: %{php}-xml
 BuildRequires: gnupg
 %if %{with_tests}
 BuildRequires:  %{_bindir}/phpunit
@@ -60,41 +57,41 @@ Provides: php-pear(PEAR) = %{version}
 Provides: php-pear(Structures_Graph) = %{structver}
 Provides: php-pear(XML_Util) = %{xmlutil}
 Provides: php-pear(PEAR_Manpages) = %{manpages}
-Provides: %{php_base}-pear(Console_Getopt) = %{getoptver}
-Provides: %{php_base}-pear(Archive_Tar) = %{arctarver}
-Provides: %{php_base}-pear(PEAR) = %{version}
-Provides: %{php_base}-pear(Structures_Graph) = %{structver}
-Provides: %{php_base}-pear(XML_Util) = %{xmlutil}
-Provides: %{php_base}-pear(PEAR_Manpages) = %{manpages}
+Provides: %{php}-pear(Console_Getopt) = %{getoptver}
+Provides: %{php}-pear(Archive_Tar) = %{arctarver}
+Provides: %{php}-pear(PEAR) = %{version}
+Provides: %{php}-pear(Structures_Graph) = %{structver}
+Provides: %{php}-pear(XML_Util) = %{xmlutil}
+Provides: %{php}-pear(PEAR_Manpages) = %{manpages}
 
 Provides: php-composer(pear/console_getopt) = %{getoptver}
 Provides: php-composer(pear/archive_tar) = %{arctarver}
 Provides: php-composer(pear/pear-core-minimal) = %{version}
 Provides: php-composer(pear/structures_graph) = %{structver}
 Provides: php-composer(pear/xml_util) = %{xmlutil}
-Provides: %{php_base}-composer(pear/console_getopt) = %{getoptver}
-Provides: %{php_base}-composer(pear/archive_tar) = %{arctarver}
-Provides: %{php_base}-composer(pear/pear-core-minimal) = %{version}
-Provides: %{php_base}-composer(pear/structures_graph) = %{structver}
-Provides: %{php_base}-composer(pear/xml_util) = %{xmlutil}
+Provides: %{php}-composer(pear/console_getopt) = %{getoptver}
+Provides: %{php}-composer(pear/archive_tar) = %{arctarver}
+Provides: %{php}-composer(pear/pear-core-minimal) = %{version}
+Provides: %{php}-composer(pear/structures_graph) = %{structver}
+Provides: %{php}-composer(pear/xml_util) = %{xmlutil}
 
-Requires:  %{php_base}-cli
+Requires:  %{php}-cli
 
 # IUS Stuff
-Provides: %{real_name} = %{version}
-Conflicts: %{real_name} < %{version}
+Provides:  php-pear = %{version}
+Conflicts: php-pear < %{version}
 
 # phpci detected extension
 # PEAR (date, spl always builtin):
-Requires:  %{php_base}-ftp
-Requires:  %{php_base}-pcre
-Requires:  %{php_base}-posix
-Requires:  %{php_base}-tokenizer
-Requires:  %{php_base}-xml
-Requires:  %{php_base}-zlib
+Requires:  %{php}-ftp
+Requires:  %{php}-pcre
+Requires:  %{php}-posix
+Requires:  %{php}-tokenizer
+Requires:  %{php}-xml
+Requires:  %{php}-zlib
 # Console_Getopt: pcre
 # Archive_Tar: pcre, posix, zlib
-Requires:  %{php_base}-bz2
+Requires:  %{php}-bz2
 # Structures_Graph: none
 # XML_Util: pcre
 # optional: overload and xdebug
@@ -281,7 +278,6 @@ fi
 %{_macrosdir}/macros.pear
 %dir %{_localstatedir}/cache/php-pear
 %dir %{_sysconfdir}/pear
-%{!?_licensedir:%global license %%doc}
 %license LICENSE*
 %doc README*
 %dir %{_docdir}/pear
