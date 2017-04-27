@@ -22,7 +22,7 @@
 
 Summary: PHP Extension and Application Repository framework
 Name: %{php}-pear
-Version: 1.10.3
+Version: 1.10.4
 Release: 1.ius%{?dist}
 Epoch: 1
 # PEAR, PEAR_Manpages, Archive_Tar, XML_Util, Console_Getopt are BSD
@@ -294,6 +294,9 @@ fi
 
 
 %changelog
+* Thu Apr 27 2017 Carl George <carl.george@rackspace.com> - 1:1.10.4-1.ius
+- Latest upstream
+
 * Tue Feb 28 2017 Ben Harper <ben.harper@rackspace.com> - 1:1.10.3-1.ius
 - Latest upstream
 - update arctarver to 1.4.2
