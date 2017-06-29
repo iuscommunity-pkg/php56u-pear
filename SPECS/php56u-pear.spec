@@ -2,7 +2,7 @@
 %global metadir %{_localstatedir}/lib/pear
 
 %global getoptver 1.4.1
-%global arctarver 1.4.2
+%global arctarver 1.4.3
 %global structver 1.1.1
 %global xmlutil   1.4.2
 # all changes to man pages came from http://pkgs.fedoraproject.org/cgit/php-pear.git/commit/?id=ee18e3c185edb01c98517f5188fd802411170397
@@ -16,7 +16,7 @@
 
 Summary: PHP Extension and Application Repository framework
 Name: %{php}-pear
-Version: 1.10.4
+Version: 1.10.5
 Release: 1.ius%{?dist}
 Epoch: 1
 # PEAR, PEAR_Manpages, Archive_Tar, XML_Util, Console_Getopt are BSD
@@ -25,7 +25,7 @@ License: BSD and LGPLv3+
 Group: Development/Languages
 URL: http://pear.php.net/package/PEAR
 Source0: http://download.pear.php.net/package/PEAR-%{version}.tgz
-Source1: https://raw.githubusercontent.com/pear/pear-core/v%{version}/install-pear.php
+Source1: https://github.com/pear/pear-core/raw/569b133d0e0bc95afaa72842d8e0faf4288e0675/install-pear.php
 Source3: cleanup.php
 Source10: pear.sh
 Source11: pecl.sh
@@ -288,6 +288,11 @@ fi
 
 
 %changelog
+* Tue Jun 27 2017 Ben Harper <ben.harper@rackspace.com> -  1:1.10.5-1.ius
+- Latest upstream
+- update arctarver to 1.4.3
+- update Source1 URL to do lack of GitHub release
+
 * Thu Apr 27 2017 Carl George <carl.george@rackspace.com> - 1:1.10.4-1.ius
 - Latest upstream
 - Add %%epoch to provides/conflicts to properly provide/conflict with the stock name
